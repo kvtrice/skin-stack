@@ -22,6 +22,7 @@ def db_seed():
             first_name='Sarah',
             last_name='Smith',
             email='sarahsmith@gmail.com',
+            is_admin=True,
             password=bcrypt.generate_password_hash('smitherson').decode('utf8')
         ),
         User(
@@ -32,30 +33,33 @@ def db_seed():
         )
     ]
 
+    # Add and commit users
+    db.session.add_all(users)
+    db.session.commit()
+
     # Add some starting products
     products = [
         Product(
            name='Daily Moisturiser',
            brand='CeraVe',
            notes='Use both AM & PM. Contains Hylauronic Acid.',
-        #    user_id=users1.id # Association
+           user_id=users[0].id
         ),
         Product(
            name='Niacinimide',
            brand='The Ordinary',
            notes='Very drying for my skin, I prefer to use it only once a day max. Sometimes only once every 2 days if possible. But it definitely helps with texture so continue to include in routine',
-        #    user_id=users1.id # Association
+           user_id=users[0].id
         ),
         Product(
            name='Azelaic Acid 20%',
            brand='Aztec',
            notes="Can use both AM & PM. Ideally don't use with other dying products (e.g: other acne treatments). Use SPF daily when using this product.",
-        #    user_id=users2.id # Association
+           user_id=users[1].id
         )
     ]
 
-    # Add & Commit the tables
-    db.session.add_all(users)
+    # Add & Commit the remaining tables
     db.session.add_all(products)
     db.session.commit()
 

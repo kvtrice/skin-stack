@@ -52,7 +52,7 @@ This is where Skin Stack comes in - an intuitive no-frills way to track and main
 
 ## 📚 ERD Overview
 
-![ERD](docs/erd/skincare_routine_erd.jpg)
+![ERD](docs/erd/skin_stack_erd.jpg)
 
 ### Key points:
 
