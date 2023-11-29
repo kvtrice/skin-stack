@@ -64,4 +64,4 @@ def all_users():
     stmt = db.select(User) 
     users = db.session.scalars(stmt).all()
 
-    return UserSchema(many=True, exclude=['password']).dump(users)
+    return UserSchema(many=True, exclude=['password', 'products']).dump(users)
