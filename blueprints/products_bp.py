@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from setup import bcrypt, db
-from models.users import User, UserSchema
-from models.products import Product, ProductSchema
+from models.user import User, UserSchema
+from models.product import Product, ProductSchema
 from flask_jwt_extended import jwt_required
 from auth import admin_required
 

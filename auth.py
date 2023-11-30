@@ -1,6 +1,6 @@
 from flask import abort
 from flask_jwt_extended import get_jwt_identity
-from models.users import User
+from models.user import User
 from setup import db
 
 def admin_required():

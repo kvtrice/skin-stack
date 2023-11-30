@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from setup import bcrypt, db
 from sqlalchemy.exc import IntegrityError
-from models.users import User, UserSchema
+from models.user import User, UserSchema
 from flask_jwt_extended import create_access_token, jwt_required
 from datetime import timedelta
 from auth import admin_required

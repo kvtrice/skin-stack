@@ -12,6 +12,7 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
 
     products = db.relationship('Product', back_populates='user')
+    routines = db.relationship('Routine', back_populates='user')
 
 class UserSchema(ma.Schema):
     products = fields.Nested('ProductSchema', exclude=['user'], many=True)

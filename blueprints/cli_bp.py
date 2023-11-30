@@ -1,7 +1,8 @@
 from flask import Blueprint
 from setup import db, bcrypt
-from models.users import User
-from models.products import Product
+from models.user import User
+from models.product import Product
+from models.routine import Routine
 
 db_commands = Blueprint('db', __name__)
 
@@ -16,7 +17,7 @@ def db_create():
 @db_commands.cli.command('seed')
 def db_seed():
 
-    # Add some starting users
+    # Seed Users
     users = [
         User(
             first_name='Sarah',
@@ -37,7 +38,40 @@ def db_seed():
     db.session.add_all(users)
     db.session.commit()
 
-    # Add some starting products
+    # Seed Routines
+    routines = [
+        Routine(
+            day_of_week='Monday',
+            time_of_day='AM',
+            user_id=users[0].id
+        ),
+        Routine(
+            day_of_week='Monday',
+            time_of_day='PM',
+            user_id=users[0].id
+        ),
+        Routine(
+            day_of_week='Tuesday',
+            time_of_day='AM',
+            user_id=users[0].id
+        ),
+        Routine(
+            day_of_week='Wednesday',
+            time_of_day='AM',
+            user_id=users[1].id
+        ),
+        Routine(
+            day_of_week='Wednesday',
+            time_of_day='PM',
+            user_id=users[1].id
+        ),
+    ]
+
+    # Add and commit Routines
+    db.session.add_all(routines)
+    db.session.commit()
+
+    # Seed Products
     products = [
         Product(
            name='Daily Moisturiser',
@@ -59,7 +93,7 @@ def db_seed():
         )
     ]
 
-    # Add & Commit the remaining tables
+    # Add & Commit Products
     db.session.add_all(products)
     db.session.commit()
 
