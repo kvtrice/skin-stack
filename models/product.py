@@ -8,9 +8,11 @@ class Product(db.Model):
     name = db.Column(db.String(100), nullable=False)
     brand = db.Column(db.String(150), nullable=False)
     notes = db.Column(db.Text())
+    
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
     user = db.relationship('User', back_populates='products')
+
+    routine_products = db.relationship('RoutineProduct', back_populates='products')
 
 class ProductSchema(ma.Schema):
     user = fields.Nested('UserSchema', exclude=['password'])

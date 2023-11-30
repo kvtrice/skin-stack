@@ -11,8 +11,8 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean, default=False)
     password = db.Column(db.String, nullable=False)
 
-    products = db.relationship('Product', back_populates='user')
-    routines = db.relationship('Routine', back_populates='user')
+    products = db.relationship('Product', back_populates='user', cascade='all, delete-orphan')
+    routines = db.relationship('Routine', back_populates='user', cascade='all, delete-orphan')
 
 class UserSchema(ma.Schema):
     products = fields.Nested('ProductSchema', exclude=['user'], many=True)

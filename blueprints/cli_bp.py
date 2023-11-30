@@ -3,6 +3,7 @@ from setup import db, bcrypt
 from models.user import User
 from models.product import Product
 from models.routine import Routine
+from models.routineproduct import RoutineProduct
 
 db_commands = Blueprint('db', __name__)
 
@@ -95,6 +96,34 @@ def db_seed():
 
     # Add & Commit Products
     db.session.add_all(products)
+    db.session.commit()
+
+    # Seed Products into Routines
+    routineproducts = [
+        RoutineProduct(
+            product_id = products[0].id,
+            routine_id = routines[0].id
+        ),
+        RoutineProduct(
+            product_id = products[1].id,
+            routine_id = routines[0].id
+        ),
+        RoutineProduct(
+            product_id = products[0].id,
+            routine_id = routines[1].id
+        ),
+        RoutineProduct(
+            product_id = products[2].id,
+            routine_id = routines[3].id
+        ),
+        RoutineProduct(
+            product_id = products[2].id,
+            routine_id = routines[4].id
+        ),
+    ]
+
+    # Add & Commit RoutineProducts
+    db.session.add_all(routineproducts)
     db.session.commit()
 
     print('Database seeded')
