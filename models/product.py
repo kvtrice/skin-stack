@@ -1,5 +1,6 @@
 from setup import db, ma
 from marshmallow import fields
+from marshmallow.validate import Length
 
 class Product(db.Model):
     __tablename__ = 'products'
@@ -16,6 +17,8 @@ class Product(db.Model):
 
 class ProductSchema(ma.Schema):
     user = fields.Nested('UserSchema', exclude=['password'])
+    name = fields.String(required=True, validate=Length(min=2, error='Product name must be at least 2 characters.'))
+    brand = fields.String(required=True, validate=Length(min=2, error='Brand name must be at least 2 characters.'))
 
     class Meta:
         fields = ('id', 'name', 'brand', 'notes', 'user')

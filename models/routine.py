@@ -1,6 +1,10 @@
 from setup import db, ma
 from marshmallow import fields
 from datetime import datetime
+from marshmallow.validate import OneOf
+
+VALID_TIMES = ('AM', 'PM')
+VALID_DAYS = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
 
 class Routine(db.Model):
     __tablename__ = 'routines'
@@ -18,6 +22,8 @@ class Routine(db.Model):
 
 class RoutineSchema(ma.Schema):
     user = fields.Nested('UserSchema', exclude=['password'])
+    time_of_day = fields.String(validate=OneOf(VALID_TIMES))
+    day_of_week = fields.String(validate=OneOf(VALID_DAYS))
 
     class Meta:
         fields = ('id', 'created_at', 'day_of_week', 'time_of_day', 'user')
