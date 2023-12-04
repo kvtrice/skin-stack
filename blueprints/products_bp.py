@@ -28,7 +28,6 @@ def all_products():
 def create_product():
     # Parse the product body through the ProductSchema
     product_info = ProductSchema(exclude=['id', 'user']).load(request.json)
-
     # Create the product
     product = Product(
         name=product_info.get('name'),
@@ -36,7 +35,6 @@ def create_product():
         notes=product_info.get('notes', ''),
         user_id=get_jwt_identity() # Assign user_id to the product
     )
-
     # Add & Commit the new product to the database
     db.session.add(product)
     db.session.commit()
@@ -48,7 +46,6 @@ def create_product():
 @jwt_required()
 def all_user_products(user_id):
     current_user_id = get_jwt_identity()
-
     # Check if the current user is the same as the request user or an admin
     if current_user_id == user_id or admin_required():
 
@@ -56,7 +53,6 @@ def all_user_products(user_id):
         user_products=db.session.scalars(stmt).all()
 
         return ProductSchema(exclude=['user', 'user.products'], many=True).dump(user_products)
-
     else:
         abort(401)
 
@@ -67,12 +63,13 @@ def all_user_products(user_id):
 def update_product(id):
     # Parse the product body through the ProductSchema
     product_info = ProductSchema(exclude=['id'], partial=True).load(request.json)
+    # Find the product based on the matching product_id that was provided in the request
     stmt = db.select(Product).where(Product.id == id)
     product = db.session.scalar(stmt)
-
+    # Check product that matched was successfully found
     if product:
+        # User can only update a product that they created (unless they're an Admin)
         authorize(product.user_id)
-
         # Conditionally update fields if present
         if 'name' in product_info:
             product.name = product_info['name']
@@ -80,10 +77,25 @@ def update_product(id):
             product.brand = product_info['brand']
         if 'notes' in product_info:
             product.notes = product_info['notes']
-        
+    
         db.session.commit()
-
         return ProductSchema(exclude=['user', 'user.products']).dump(product), 200
-
+    else:
+	    return {'Error': 'Product not found'}, 404
+    
+# Delete a Product
+@products_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_product(id):
+    # Find the product based on the matching product_id that was provided in the request
+    stmt = db.select(Product).where(Product.id == id)
+    product = db.session.scalar(stmt)
+    # Check product that matched was successfully found
+    if product:
+        # User can only delete a product that they created (unless they're an Admin)
+        authorize(product.user_id)
+        db.session.delete(product)
+        db.session.commit()
+        return {'Message': 'Product has been successfully deleted'}, 200
     else:
 	    return {'Error': 'Product not found'}, 404

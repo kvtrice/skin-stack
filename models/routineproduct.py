@@ -6,10 +6,10 @@ class RoutineProduct(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id', ondelete='CASCADE'), nullable=True)
     products = db.relationship('Product', back_populates='routine_products')
 
-    routine_id = db.Column(db.Integer, db.ForeignKey('routines.id'), nullable=False)
+    routine_id = db.Column(db.Integer, db.ForeignKey('routines.id', ondelete='CASCADE'), nullable=False)
     routines = db.relationship('Routine', back_populates='routine_products')
 
 
