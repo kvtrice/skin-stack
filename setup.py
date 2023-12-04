@@ -23,4 +23,3 @@ def unauthorized(err):
 @app.errorhandler(ValidationError)
 def validation_error(err):
     return {'Error': err.messages}
-

@@ -11,11 +11,8 @@ def admin_required():
     # Match the user to an existing user id
     stmt = db.select(User).filter_by(id = user_id)
     user = db.session.scalar(stmt)
-
-    # Check if the user is an admin based on the is_admin boolean
-    # If not, abort the request
-    if not (user and user.is_admin):
-        abort(401)
+    
+    return user and user.is_admin
 
 
 # Authorisation for Users to only be able to access their own resources
