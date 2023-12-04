@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, abort
 from setup import bcrypt, db
 # from models.user import User, UserSchema
 # from models.product import Product, ProductSchema
@@ -13,8 +13,9 @@ routines_bp = Blueprint('routines', __name__, url_prefix='/routines')
 @routines_bp.route('/')
 @jwt_required()
 def all_routines():
-    # Only allow admins to access
-    admin_required()
+    # Abort if user is not an admin
+    if not admin_required():
+        abort(401)
     # Query to select all products in the database
     stmt = db.select(Routine)
     routines = db.session.scalars(stmt).all()

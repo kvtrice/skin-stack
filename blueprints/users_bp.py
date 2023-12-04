@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, abort
 from setup import bcrypt, db
 from sqlalchemy.exc import IntegrityError
 from models.user import User, UserSchema
@@ -58,8 +58,11 @@ def login():
 @users_bp.route('/')
 @jwt_required()
 def all_users():
-    # Limit only to admins
-    admin_required()
+
+    # Abort if user is not an admin
+    if not admin_required():
+        abort(401)
+
     # Query to select all users
     stmt = db.select(User) 
     users = db.session.scalars(stmt).all()
