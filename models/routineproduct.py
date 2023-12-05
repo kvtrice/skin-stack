@@ -14,7 +14,7 @@ class RoutineProduct(db.Model):
 
 
 class RoutineProductSchema(ma.Schema):
-    product = fields.Nested('ProductSchema', many=True)
+    product = fields.Nested('ProductSchema')
 
     class Meta:
-        fields = ('id', 'routine_id', 'product_id' 'product')
+        fields = ('id', 'routine_id', 'product_id', 'product')

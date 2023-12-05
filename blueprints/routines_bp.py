@@ -58,7 +58,7 @@ def create_routine():
     return RoutineSchema().dump(routine), 201
 
 
-# Get a list of a user's routines
+# Get a list of a user's routines and associated products
 @routines_bp.route('/<int:user_id>')
 @jwt_required()
 def user_routines(user_id):
@@ -69,6 +69,6 @@ def user_routines(user_id):
         stmt = db.select(Routine).where(Routine.user_id == user_id)
         user_routines = db.session.scalars(stmt).all()
 
-        return RoutineSchema(many=True).dump(user_routines)
+        return RoutineSchema(exclude=['routine_products.routine_id', 'routine_products.product.user', 'routine_products.product_id', 'user_id', 'routine_products.id'], many=True).dump(user_routines)
     else:
         abort(401)
