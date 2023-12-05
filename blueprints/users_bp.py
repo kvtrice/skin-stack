@@ -11,12 +11,15 @@ from auth import admin_required
 users_bp = Blueprint('users', __name__, url_prefix='/users')
 
 
-# Register new User
+#----------------------------------------------------------------
+# REGISTER USER
+
 @users_bp.route('/register', methods=['POST'])
 def register():
     try:
         # Parse incoming POST body through Schema
         user_info = UserSchema(exclude=['id', 'is_admin']).load(request.json)
+
         # Create a new user with the parsed data
         user = User(
             first_name=user_info['first_name'],
@@ -24,39 +27,52 @@ def register():
             email=user_info['email'],
             password=bcrypt.generate_password_hash(user_info['password']).decode('utf8'),
         )
+
         # Add and commit the new user to the database
         db.session.add(user)
         db.session.commit()
         return UserSchema(exclude=['password', 'products']).dump(user), 201
+    
     except IntegrityError:
         return {'Error': 'This email address already in use!'}, 409
     
 
-# Login Existing User
+#----------------------------------------------------------------
+# LOGIN USER
+
 @users_bp.route('/login', methods=['POST'])
 def login():
+
     # Parse incoming POST body through Schema
     user_info = UserSchema().load(request.json)
+
     # Query to match the user with an existing email
     stmt = db.select(User).where(User.email == user_info['email'])
     user = db.session.scalar(stmt)
+
     # Check user exists and that the password matches
     if user and bcrypt.check_password_hash(user.password, user_info['password']):
         # Create a JWT token
+
         token = create_access_token(identity=user.id, additional_claims={'email': user.email, 'first_name': user.first_name}, expires_delta=timedelta(hours=1)) # 1 hour expiry on token
         return {'token':token, 'user':UserSchema(exclude=['password']).dump(user)}
+    
     # Otherwise advise login info was incorrect
     else:
         return {'Error': 'Password or Email address is invalid!'}, 401
     
 
-# Get all users (admin only)
+#----------------------------------------------------------------
+# GET ALL USERS (Global - Admin Only)
+
 @users_bp.route('/')
 @jwt_required()
 def all_users():
+
     # Abort if user is not an admin
     if not admin_required():
         abort(401)
+        
     # Query to select all users
     stmt = db.select(User) 
     users = db.session.scalars(stmt).all()

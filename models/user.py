@@ -16,7 +16,6 @@ class User(db.Model):
     routines = db.relationship('Routine', back_populates='user', cascade='all, delete-orphan')
 
 class UserSchema(ma.Schema):
-    # products = fields.Nested('ProductSchema', exclude=['user'], many=True)
     email = fields.Email(required=True)
     password = fields.String(required=True, validate=Length(min=8, error='Invalid Password. Must be at least 8 characters.'))
 

@@ -13,7 +13,6 @@ class Product(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User', back_populates='products')
     routines = db.relationship('RoutineProduct', back_populates='product')
-    # routine_products = db.relationship('RoutineProduct', back_populates='products')
 
 
 class ProductSchema(ma.Schema):

@@ -18,7 +18,7 @@ class Routine(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User', back_populates='routines')
 
-    routine_products = db.relationship('RoutineProduct', back_populates='routine')
+    routine_products = db.relationship('RoutineProduct', back_populates='routine', cascade='all, delete-orphan')
 
 
 class RoutineSchema(ma.Schema):

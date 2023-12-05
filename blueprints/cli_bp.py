@@ -5,16 +5,23 @@ from models.product import Product
 from models.routine import Routine
 from models.routineproduct import RoutineProduct
 
+
 db_commands = Blueprint('db', __name__)
 
-# Drop any existing databases and create a new one
+
+#----------------------------------------------------------------
+# DROP AND CREATE NEW DB
+
 @db_commands.cli.command('create')
 def db_create():
     db.drop_all()
     db.create_all()
     print('Created tables')
 
-# Seed the database wth starting data
+
+#----------------------------------------------------------------
+# SEED THE DB
+
 @db_commands.cli.command('seed')
 def db_seed():
 
