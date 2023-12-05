@@ -110,3 +110,80 @@ def delete_routine(id):
     
     else:
 	    return {'Error': 'Routine not found'}, 404
+
+
+#----------------------------------------------------------------
+# ADD PRODUCT TO A ROUTINE
+
+@routines_bp.route('/<int:routine_id>/products/<int:product_id>', methods=['POST'])
+@jwt_required()
+def add_product_to_routine(routine_id, product_id):
+
+    # Find the routine based on the matching routine_id that was provided in the request
+    stmt1 = db.select(Routine).where(Routine.id == routine_id)
+    routine = db.session.scalar(stmt1)
+
+    # Find the product based on the matching product_id that was provided in the request
+    stmt2 = db.select(Product).where(Product.id == product_id)
+    product = db.session.scalar(stmt2)
+
+    # Check both the routine and product were successfully found
+    if routine and product:
+
+        # User can only add a product to a routine that they own (unless they're an Admin)
+        authorize(routine.user_id)
+
+        # Check if the product is already associated with that routine
+        existing_association = db.session.query(RoutineProduct).filter(
+             RoutineProduct.routine_id == routine_id,
+             RoutineProduct.product_id == product_id
+        ).first()
+
+        if not existing_association:
+             
+            # Add a new relationship between specified routine and product in RoutineProduct
+            new_product_routine = RoutineProduct(
+                 routine=routine, 
+                 product=product
+                 )
+            db.session.add(new_product_routine)
+            db.session.commit()
+            return {'Message': 'Product has been successfully added to this routine.'}, 200
+        
+        else:
+             return {'Message': 'Product is already associated with this routine.'}, 400
+    
+    else:
+	    return {'Error': 'Specified routine or product not found.'}, 404
+    
+
+#----------------------------------------------------------------
+# DELETE A PRODUCT FROM A ROUTINE
+
+@routines_bp.route('/<int:routine_id>/products/<int:product_id>', methods=['DELETE'])
+@jwt_required()
+def delete_product_from_routine(routine_id, product_id):
+
+    # Find the routine based on the matching routine_id that was provided in the request
+    stmt1 = db.select(Routine).where(Routine.id == routine_id)
+    routine = db.session.scalar(stmt1)
+
+    # Find the product based on the matching product_id that was provided in the request
+    stmt2 = db.select(Product).where(Product.id == product_id)
+    product = db.session.scalar(stmt2)
+
+    # Check both the routine and product were successfully found
+    if routine and product:
+
+        # User can only delete a a product from a routine that they own (unless they're an Admin)
+        authorize(routine.user_id)
+
+        # Delete the specified product from RoutineProduct (removing the relationship only)
+        stmt3 = db.delete(RoutineProduct).where(RoutineProduct.routine_id == routine_id, RoutineProduct.product_id == product_id)
+        db.session.execute(stmt3)
+
+        db.session.commit()
+        return {'Message': 'Product has been successfully deleted from this routine.'}, 200
+    
+    else:
+	    return {'Error': 'Specified routine or product not found'}, 404
