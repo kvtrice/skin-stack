@@ -124,27 +124,131 @@ However it's worth noting that these advantages do come with the trade off of pe
 
 ## 5. API Endpoints ☁️
 
-### Key User Actions
+### Endpoint Directory
+1. [Register user](#1-register-user)
+2. [Login user](#2-login-user)
+3. [Get all users (Global - Admin only)](#3-get-all-users)
+4. [Get all products (Global - Admin only)]()
+5. [Get all Routines (Global - Admin only)]()
+6. [Create a product]()
+7. [Update a product]()
+8. [Delete a product]()
+9. [Get user products]()
+10. [Create a routine]()
+11. [Add a product to a routine]()
+12. [Delete a product from a routine]()
+13. [Delete a routine]()
+14. [Get user routines]()
 
-**User**
+### 1. Register user
+Allows a user to create an account for the application.
 
-- A user can Register (Create an account)
-- A user can Login to an existing account
+- Endpoint: `/users/register`
+- Request Verb: `POST`
+- Required data:
+  - `first_name`
+  - `last_name`
+  - `email`
+  - `password`
+- Expected Response: `201 Created` 
+  - Return all data *excluding* `password`
+- Authentication: None for registering a user. Password is hashed upon registration using Bcrypt.
 
-**Products**
+Example Request:
+```JSON
+{
+	"first_name": "Kat",
+	"last_name": "Test",
+	"email": "kat@tester.com",
+	"password": "password"
+}
+```
 
-- A user can add a new product (scoped to the user)
-- A user can get a list of all their added products
-- A user can update one of their existing products
-- A user can delete one of their products
 
-**Routines**
+Example Response:
 
-- A user can create a new routine for themselves
-- A user can add a product to an existing routine
-- A user can delete a product from an existing routine
-- A user can get a list of all their routines and the products within them
-- A user can delete a routine of theirs (this will not delete the products themselves, as products can exist without being associated with a routine)
+```JSON
+{
+	"email": "kat@tester.com",
+	"first_name": "Kat",
+	"id": 1,
+	"is_admin": false,
+	"last_name": "Test"
+}
+```
+---
+
+### 2. Login user
+Allows a registered user to login to the application. 
+
+- Endpoint: `/users/login`
+- Request Verb: `POST`
+- Required data:
+  - `email`
+  - `password`
+- Expected Response: `200 OK` 
+  - Return all data *including* JWT `token` but *excluding* `password`
+- Authentication: User is authenticated based on matching email and password. If matching, a JWT token is generated for the user.
+
+Example Request:
+```JSON
+{
+	"email": "admin@admin.com",
+	"password": "password"
+}
+```
+
+
+Example Response:
+
+```JSON
+{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMTc1MjMwMCwianRpIjoiNTkzYzc4MzktMzA4NC00YzNmLWE4NDYtYzBjMmExZGM3Y2JmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNzAxNzUyMzAwLCJleHAiOjE3MDE3NTU5MDAsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiZmlyc3RfbmFtZSI6IkthdCJ9.cAZwDQRKRG9aRgpTMMIjusBkvvz8eQV2As_CnXBzye4",
+	"user": {
+		"email": "admin@admin.com",
+		"first_name": "Kat",
+		"id": 1,
+		"is_admin": true,
+		"last_name": "Admin"
+	}
+}
+```
+---
+### 3. Get all users
+Allows an administrator to get a list of all registered users in the application
+
+- Endpoint: `/users`
+- Request Verb: `GET`
+- Required data: None
+- Expected Response: `200 OK` 
+  - Return all user data *excluding* `password`
+- Authentication: JWT token must be valid *and* `is_admin` = true (handled by `admin_required()` function)
+
+
+Example Response:
+
+```JSON
+[
+	{
+		"email": "admin@admin.com",
+		"first_name": "Kat",
+		"id": 1,
+		"is_admin": true,
+		"last_name": "Admin"
+	},
+	{
+		"email": "test@gmail.com",
+		"first_name": "Testa",
+		"id": 2,
+		"is_admin": false,
+		"last_name": "Testerson"
+	}
+]
+```
+---
+
+
+
 
 ## 6. ERD 📚
 
