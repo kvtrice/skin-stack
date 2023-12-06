@@ -132,6 +132,7 @@ def add_product_to_routine(routine_id, product_id):
 
         # User can only add a product to a routine that they own (unless they're an Admin)
         authorize(routine.user_id)
+        authorize(product.user_id)
 
         # Check if the product is already associated with that routine
         existing_association = db.session.query(RoutineProduct).filter(

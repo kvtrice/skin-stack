@@ -150,7 +150,7 @@ Allows a user to create an account for the application.
   - `last_name`
   - `email`
   - `password`
-- Expected Response: `201 Created` 
+- Expected Response: `201 CREATED` 
   - Return all data *excluding* `password`
 - Authentication: None for registering a user. Password is hashed upon registration using Bcrypt.
 
@@ -163,7 +163,6 @@ Example Request:
 	"password": "password"
 }
 ```
-
 
 Example Response:
 
@@ -246,9 +245,342 @@ Example Response:
 ]
 ```
 ---
+### 4. Get all products
+Allows an administrator to get a list of all products in the application (from any user)
+
+- Endpoint: `/products`
+- Request Verb: `GET`
+- Required data: None
+- Expected Response: `200 OK` 
+  - Return all product data along with the associated user data *excluding* `password` and `is_admin`
+- Authentication: JWT token must be valid *and* `is_admin` = true (handled by `admin_required()` function)
 
 
+Example Response:
 
+```JSON
+[
+	{
+		"brand": "CeraVe",
+		"id": 1,
+		"name": "Daily Moisturiser",
+		"notes": "Use both AM & PM. Contains Hylauronic Acid.",
+		"user": {
+			"email": "admin@admin.com",
+			"first_name": "Kat",
+			"id": 1,
+			"last_name": "Admin"
+		}
+	}
+]
+```
+---
+### 5. Get all routines
+Allows an administrator to get a list of all routines in the application (from any user), along with the associated products (if any) within the routine/(s).
+
+- Endpoint: `/routines`
+- Request Verb: `GET`
+- Required data: None
+- Expected Response: `200 OK` 
+  - Returns all routine data along with the associated product data *excluding* `routine_id` and `product_id` from `routine_products` as these are already returned as part of the routine and product schema's resepctively (would be duplicate values). Also excluding additional user data save for `user_id`
+- Authentication: JWT token must be valid *and* `is_admin` = true (handled by `admin_required()` function)
+
+Example Response:
+
+```JSON
+[
+	{
+		"created_at": "2023-12-05",
+		"day_of_week": "Monday",
+		"id": 1,
+    "time_of_day": "AM",
+		"user_id": 1,
+		"routine_products": [
+			{
+				"id": 1,
+				"product": {
+					"brand": "CeraVe",
+					"id": 1,
+					"name": "Daily Moisturiser",
+					"notes": "Use both AM & PM. Contains Hylauronic Acid."
+				}
+			},
+			{
+				"id": 2,
+				"product": {
+					"brand": "The Ordinary",
+					"id": 2,
+					"name": "Niacinimide",
+					"notes": "Very drying for my skin, I prefer to use it only once a day max. Apply before heavy creams."
+				}
+			}
+		]
+	},
+  {
+    "created_at": "2023-12-05",
+    "day_of_week": "Sunday",
+    "id": 2,
+    "time_of_day": "PM",
+    "user_id": 2,
+    "routine_products": []
+  },
+]
+```
+---
+### 6. Create a product
+Allows a registered user to create a new product for themselves.
+
+- Endpoint: `/products`
+- Request Verb: `POST`
+- Required data:
+  - `name`
+  - `brand`
+  - `notes`
+- Expected Response: `201 CREATED` 
+  - Return all product data *excluding* associated user information
+- Authentication: JWT token must be valid.
+
+Example Request:
+```JSON
+{
+	"name": "Lactic Acid 2%",
+	"brand": "The Ordinary",
+	"notes": "Use every other day for my skin, otherwise it's too drying"
+}
+```
+
+Example Response:
+
+```JSON
+{
+	"brand": "The Ordinary",
+	"id": 7,
+	"name": "Lactic Acid 2%",
+	"notes": "Use every other day for my skin, otherwise it's too drying"
+}
+```
+---
+### 7. Update a product
+Allows a registered user to update an existing product. Standard users are only able to update their own products whilst admins are able to update any product in the database.
+
+- Endpoint: `/products/<int:product_id>`
+- Request Verb: `PUT`
+- Required data:
+  - `name` or
+  - `brand` or
+  - `notes`
+  - Any combination of the fields can be optionally updated 
+
+- Expected Response: `200 OK` 
+  - Return all product data *excluding* associated user information
+- Authentication: JWT token must be valid. Checks that the user making the request matches the user_id associated with the product OR if the user is an admin.
+
+Example Request:
+```JSON
+{
+  "notes": "This is an updated note"
+}
+```
+
+Example Response:
+
+```JSON
+{
+	"brand": "The Ordinary",
+	"id": 7,
+	"name": "Lactic Acid 2%",
+	"notes": "This is an updated note"
+}
+```
+---
+### 8. Delete a product
+Allows a registered user to delete an existing product. Standard users are only able to delete their own products whilst admins are able to delete any product in the database.
+
+- Endpoint: `/products/<int:product_id>`
+- Request Verb: `DELETE`
+- Required data: None
+- Expected Response: `200 OK` 
+  - Return confirmation of successful delete operation
+- Authentication: JWT token must be valid. Checks that the user making the request matches the user_id associated with the product OR if the user is an admin.
+
+Example Response:
+
+```JSON
+{
+	"Message": "Product has been successfully deleted"
+}
+```
+---
+### 9. Get user products
+Allows a registered user to get a list of their products. Standard users are only able to access a list of products associated with their own user_id. Admins are able to get a list of products associated with any user_id. In both cases, the list of products is scoped to that of the provided user_id.
+
+- Endpoint: `/products/<int:user_id>`
+- Request Verb: `GET`
+- Required data: None
+- Expected Response: `200 OK` 
+  - Return all products along with the product data *excluding* associated user information
+- Authentication: JWT token must be valid. Checks that the user making the request matches the user_id provided in the request OR if the user is an admin.
+
+Example Response:
+
+```JSON
+[
+	{
+		"brand": "CeraVe",
+		"id": 1,
+		"name": "Daily Moisturiser",
+		"notes": "Use both AM & PM. Contains Hylauronic Acid."
+	},
+	{
+		"brand": "The Ordinary",
+		"id": 2,
+		"name": "Niacinimide",
+		"notes": "Very drying for my skin, I prefer to use it only once a day max. Apply before heavy creams."
+	}
+]
+```
+---
+### 10. Create a routine
+Allows a registered user to create a new skincare routine for themselves.
+
+- Endpoint: `/routines`
+- Request Verb: `POST`
+- Required data:
+  - `day_of_week`
+    - Acceptable values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`, `Saturday`, `Sunday`
+  - `time_of_day`
+    - Acceptable values: `AM`, `PM`
+- Expected Response: `201 CREATED` 
+  - Return all routine data.
+- Authentication: JWT token must be valid.
+
+Example Request:
+```JSON
+{
+	"day_of_week": "Sunday",
+	"time_of_day": "PM"
+}
+```
+
+Example Response:
+
+```JSON
+{
+	"created_at": "2023-12-05",
+	"day_of_week": "Sunday",
+	"id": 6,
+	"time_of_day": "PM"
+}
+```
+---
+### 11. Add a product to a routine
+Allows a registered user to add an existing product to an existing routine. Users are only able to complete this operation on their own products and their own routine unless they are an admin.
+
+- Endpoint: `/routines/<int:routine_id>/products/<int:product_id>`
+- Request Verb: `POST`
+- Required data: None; Both the routine_id and product_id are provided in the request, so no JSON body is required.
+- Expected Response: `200 OK` 
+  - Return confirmation of successful operation
+- Authentication: JWT token must be valid. Both the user_id of the requested routine and the user_id of the requested product must match the authenticated user OR the user must be an admin.
+
+Example Response:
+
+```JSON
+{
+	"Message": "Product has been successfully added to this routine."
+}
+```
+---
+### 12. Delete a product from a routine
+Allows a registered user to delete an existing product from an existing routine. Users are only able to complete this operation on their own products and their own routines unless they are an admin.
+
+- Endpoint: `/routines/<int:routine_id>/products/<int:product_id>`
+- Request Verb: `DELETE`
+- Required data: None; Both the routine_id and product_id are provided in the request, so no JSON body is required.
+- Expected Response: `200 OK` 
+  - Return confirmation of successful operation
+- Authentication: JWT token must be valid. Both the user_id of the requested routine and the user_id of the requested product must match the authenticated user OR the user must be an admin.
+
+Example Response:
+
+```JSON
+{
+	"Message": "Product has been successfully deleted from this routine."
+}
+```
+---
+### 13. Delete a routine
+Allows a registered user to delete an existing routine. Standard users are only able to delete their own routines whilst admins are able to delete any routine in the database (from any user). Deleting a routine does not delete any products within it, it only deletes the routine_product relationship.
+
+- Endpoint: `/routines/<int:routine_id>`
+- Request Verb: `DELETE`
+- Required data: None
+- Expected Response: `200 OK` 
+  - Return confirmation of successful delete operation
+- Authentication: JWT token must be valid. Checks that the user making the request matches the user_id associated with the routine OR if the user is an admin.
+
+Example Response:
+
+```JSON
+{
+	"Message": "Routine has been successfully deleted. Any products have been dissasociated but not deleted."
+}
+```
+---
+### 14. Get user routines
+Allows a registered user to get a list of their routines along with the associated products. Standard users are only able to access a list of routines associated with their own user_id. Admins are able to get a list of routines associated with any user_id. In both cases, the list of routines is scoped to that of the provided user_id in the request.
+
+- Endpoint: `/routines/<int:user_id>`
+- Request Verb: `GET`
+- Required data: None
+- Expected Response: `200 OK` 
+  - Return all routines along with the product data *excluding* associated user information
+- Authentication: JWT token must be valid. Checks that the user making the request matches the user_id provided in the request OR if the user is an admin.
+
+Example Response:
+
+```JSON
+[
+	{
+		"created_at": "2023-12-05",
+		"day_of_week": "Monday",
+		"id": 2,
+    "time_of_day": "PM",
+		"routine_products": [
+			{
+				"product": {
+					"brand": "The Ordinary",
+					"id": 2,
+					"name": "Niacinimide",
+					"notes": "Very drying for my skin, I prefer to use it only once a day max. Apply before heavy creams."
+				}
+			},
+			{
+				"product": {
+					"brand": "The Ordinary",
+					"id": 6,
+					"name": "Lactic Acid",
+					"notes": "Use every other day for my skin, otherwise it's too drying"
+				}
+			}
+		]
+	},
+	{
+		"created_at": "2023-12-05",
+		"day_of_week": "Sunday",
+		"id": 5,
+		"time_of_day": "AM",
+		"routine_products": []
+	},
+	{
+		"created_at": "2023-12-05",
+		"day_of_week": "Sunday",
+		"id": 6,
+		"time_of_day": "PM",
+		"routine_products": [],
+	}
+]
+```
 
 ## 6. ERD 📚
 
