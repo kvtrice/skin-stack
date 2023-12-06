@@ -7,11 +7,10 @@ This project is an **API webserver** for a simple Skincare Routine Tracker appli
 - [Github Repository](https://github.com/kvtrice/skin-stack)
 - [Development Plan (Linear)](https://linear.app/kats-workspace/join/88596d7e69b639b4a651783417b35e23?s=4)
 
-<br>
 
 # Table of Contents
 
-👉 Start here: [Installation Instructions]()
+👉 Start here: [Installation Instructions](#installation-instructions-macos)
 
 1. [The problem](#1-the-problem-🙅‍♀️)
 2. [Why should we solve it?](#2-why-should-we-solve-it-🤔)
@@ -23,8 +22,6 @@ This project is an **API webserver** for a simple Skincare Routine Tracker appli
 8. [Project models (in terms of the relationships they have with each other)](#8-project-models-in-terms-of-the-relationships-they-have-with-each-other-🧱)
 9. [Database relations implemented in this app](#9-database-relations-implemented-in-this-app-👫)
 10. [Task allocation & tracking (develolpment plan)](#10-task-allocation--tracking-develolpment-plan-💻)
-
-<br>
 
 # Installation Instructions (MacOS)
 
@@ -102,7 +99,6 @@ JWT_KEY= # JWT signing key
 DB_URI= # Database URI string
 ```
 
-<br>
 
 # Project Documentation ⬇️
 
