@@ -21,7 +21,7 @@ This project is an **API webserver** for a simple Skincare Routine Tracker appli
 7. [Third party services used](#7-third-party-services-used-🤝)
 8. [Project models (in terms of the relationships they have with each other)](#8-project-models-in-terms-of-the-relationships-they-have-with-each-other-🧱)
 9. [Database relations implemented in this app](#9-database-relations-implemented-in-this-app-👫)
-10. [Task allocation & tracking (develolpment plan)](#10-task-allocation--tracking-develolpment-plan-💻)
+10. [Task allocation & tracking (develolpment plan)](#10-task-allocation--tracking-development-plan-💻)
 
 # Installation Instructions (MacOS)
 
