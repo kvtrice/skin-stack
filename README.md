@@ -163,8 +163,49 @@ However it's worth noting that these advantages do come with the trade off of pe
 
 ## 7. Third party services used 🤝
 
+Throughout the course of this project, multiple third party services have been utillised to create this application. Some of the key ones include:
+
+### SQL Alchemy
+
+### Marshmallow
+
+### Bcrypt
+
+### JWT Manager
+
 ## 8. Project models (in terms of the relationships they have with each other) 🧱
+
+### User model
+
+### Product model
+
+### Routine model
+
+### RoutineProduct model
 
 ## 9. Database relations implemented in this app 👫
 
-## 10. Task allocation & tracking (develolpment plan) 💻
+## 10. Task allocation & tracking (development plan) 💻
+
+[Link to Linear Board](https://linear.app/kats-workspace/join/88596d7e69b639b4a651783417b35e23?s=4)
+
+Tasks were tracked using Linear.
+
+### Linear Board
+
+![Image 1.0](/docs/development_plan/1.0.jpg)
+![Image 1.1](/docs/development_plan/1.1.jpg)
+![Image 1.2](/docs/development_plan/1.2.jpg)
+![Image 1.3](/docs/development_plan/1.3.jpg)
+![Image 1.4](/docs/development_plan/1.4.jpg)
+![Image 1.5](/docs/development_plan/1.5.jpg)
+![Image 2.0](/docs/development_plan/2.0.jpg)
+![Image 2.1](/docs/development_plan/2.1.jpg)
+![Image 2.2](/docs/development_plan/2.2.jpg)
+![Image 3.0](/docs/development_plan/3.0.jpg)
+![Image 3.1](/docs/development_plan/3.1.jpg)
+![Image 3.2](/docs/development_plan/3.2.jpg)
+![Image 3.3](/docs/development_plan/3.3.jpg)
+![Image 4.0](/docs/development_plan/4.0.jpg)
+![Image 4.1](/docs/development_plan/4.1.jpg)
+![Image 4.2](/docs/development_plan/4.2.jpg)
