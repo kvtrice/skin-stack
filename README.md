@@ -12,16 +12,16 @@ This project is an **API webserver** for a simple Skincare Routine Tracker appli
 
 👉 Start here: [Installation Instructions](#installation-instructions-macos)
 
-1. [The problem](#1-the-problem-🙅‍♀️)
-2. [Why should we solve it?](#2-why-should-we-solve-it-🤔)
-3. [Chosen database system (and it's drawbacks)](#3chosen-database-system-and-its-drawbacks-🚦)
-4. [Key functionalities & benefits of an ORM](#4key-functionalities--benefits-of-an-orm-💡)
-5. [API Documentation](#5-api-endpoints-☁️)
-6. [ERD for the application](#6-erd-📚)
-7. [Third party services used](#7-third-party-services-used-🤝)
-8. [Project models (in terms of the relationships they have with each other)](#8-project-models-in-terms-of-the-relationships-they-have-with-each-other-🧱)
-9. [Database relations implemented in this app](#9-database-relations-implemented-in-this-app-👫)
-10. [Task allocation & tracking (develolpment plan)](#10-task-allocation--tracking-development-plan-💻)
+1. [The problem](#1)
+2. [Why should we solve it?](#2)
+3. [Chosen database system (and it's drawbacks)](#3)
+4. [Key functionalities & benefits of an ORM](#4)
+5. [API Documentation](#5)
+6. [ERD for the application](#6)
+7. [Third party services used](#7)
+8. [Project models (in terms of the relationships they have with each other)](#8)
+9. [Database relations implemented in this app](#9)
+10. [Task allocation & tracking (develolpment plan)](#10)
 
 # Installation Instructions (MacOS)
 
@@ -102,11 +102,11 @@ DB_URI= # Database URI string
 
 # Project Documentation ⬇️
 
-## 1. The problem 🙅‍♀️
+## 1. The problem 🙅‍♀️ <div id="1"/>
 
 Millions of people globally have some kind of skincare routine; this can range from a simple daily moisturiser to a complex 10 step regime. But as a skincare routine grows, so too does the number of products you have, and the number of interactions between products that need to be considered. Some products need to be used at night time, others in the morning, some need to be washed of immediately, others kept on, some can't be used in conjunction with certain other products and others need to be used only twice a week. How do you keep track of it all?
 
-## 2. Why should we solve it? 🤔
+## 2. Why should we solve it? 🤔 <div id="2"/>
 
 As someone that's recently embarked on a skincare journey I've felt this pain first hand. It's become increasingly challenging to keep track of which products I should be using, when I should be using them and what order I should be using them in. I've been on the hunt for solutions to help me track my routines but every application I tried is either too costly, has a lot of extra's around mood or food tracking and other aspects I'm not interested in or has poor UI making it frustrating to navigate. It's seemed impossible to find a simple, no-fluff skincare routine tracker that let's me add products in a click and tracks the what, how and when of my daily skincare routines.
 
@@ -114,15 +114,15 @@ And when speaking to people around me, it seems I'm not alone. Many have resorte
 
 This is where Skin Stack comes in - an intuitive no-frills way to track and maintain your skincare routines without the effort.
 
-## 3.Chosen database system (and it's drawbacks) 🚦
+## 3. Chosen database system (and it's drawbacks) 🚦 <div id="3"/>
 
 PostgreSQL was chosen as it is a powerful relational database management system. For my project this is an important factor given the many-to-many relationship between Routines and Products (described in the ERD above). Additionally PostgreSQL offered more scalability and extensibility than other options (such as MySQL), as well as having robust data integrity functionality, making future project enhancements and expansions possible with ease.
 
 However it's worth noting that these advantages do come with the trade off of performance. PostgreSQL being so highly exstensible comes at a cost, and as such it's not as lightweight as some of it's competitors. Taking thsi into consideration, having concurrency handled extremely well and certainty about the integrity of my data was worth the trade off.
 
-## 4.Key functionalities & benefits of an ORM 💡
+## 4. Key functionalities & benefits of an ORM 💡 <div id="4"/>
 
-## 5. API Endpoints ☁️
+## 5. API Endpoints ☁️ <div id="5"/>
 
 ### Endpoint Directory
 1. [Register user](#1-register-user)
@@ -582,7 +582,7 @@ Example Response:
 ]
 ```
 
-## 6. ERD 📚
+## 6. ERD 📚 <div id="6"/>
 
 ![ERD](docs/erd/skin_stack_erd.jpg)
 
@@ -597,7 +597,7 @@ Example Response:
   - (Will check if product exists first and if not, create a new one)
 - Routines and products are scoped to a user, so they have full control over everything (Create, update, delete, get). There is no shared database across all users
 
-## 7. Third party services used 🤝
+## 7. Third party services used 🤝 <div id="7"/>
 
 Throughout the course of this project, multiple third party services have been utillised to create this application. Some of the key ones include:
 
@@ -609,7 +609,7 @@ Throughout the course of this project, multiple third party services have been u
 
 ### JWT Manager
 
-## 8. Project models (in terms of the relationships they have with each other) 🧱
+## 8. Project models (in terms of the relationships they have with each other) 🧱 <div id="8"/>
 
 ### User model
 
@@ -619,9 +619,9 @@ Throughout the course of this project, multiple third party services have been u
 
 ### RoutineProduct model
 
-## 9. Database relations implemented in this app 👫
+## 9. Database relations implemented in this app 👫 <div id="9"/>
 
-## 10. Task allocation & tracking (development plan) 💻
+## 10. Task allocation & tracking (development plan) 💻 <div id="10"/>
 
 [Link to Linear Board](https://linear.app/kats-workspace/join/88596d7e69b639b4a651783417b35e23?s=4)
 
