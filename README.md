@@ -106,21 +106,41 @@ DB_URI= # Database URI string
 
 Millions of people globally have some kind of skincare routine; this can range from a simple daily moisturiser to a complex 10 step regime. But as a skincare routine grows, so too does the number of products you have, and the number of interactions between products that need to be considered. Some products need to be used at night time, others in the morning, some need to be washed of immediately, others kept on, some can't be used in conjunction with certain other products and others need to be used only twice a week. How do you keep track of it all?
 
-## 2. Why should we solve it? 🤔 <div id="2"/>
-
 As someone that's recently embarked on a skincare journey I've felt this pain first hand. It's become increasingly challenging to keep track of which products I should be using, when I should be using them and what order I should be using them in. I've been on the hunt for solutions to help me track my routines but every application I tried is either too costly, has a lot of extra's around mood or food tracking and other aspects I'm not interested in or has poor UI making it frustrating to navigate. It's seemed impossible to find a simple, no-fluff skincare routine tracker that let's me add products in a click and tracks the what, how and when of my daily skincare routines.
 
 And when speaking to people around me, it seems I'm not alone. Many have resorted to just using the notes app in their phone in lieu of a better solution. And as you can imagine it quickly becomes frustrating to manually add and change products or routines across all days of the week, not to mention the lack of product tracking or home screen reminders.
 
-This is where Skin Stack comes in - an intuitive no-frills way to track and maintain your skincare routines without the effort.
+## 2. Why is it a problem worth solving? 🤔 <div id="2"/>
+
+There are a number of reasons why improving how people track their skincare routines is a valuable issue to tackle:
+
+### Skincare Routine Complexity
+Skincare routines are becoming more and more sophisticated, with the number of product options increasing rapidly the amount of research and knowledge around products always increasing around the world. Without having a straight forward way to to track routines users find it difficult to remember which products to use, how to user them and when. Or worse, they might put it in the 'too hard basket' and forego having a skincare routine at all.
+
+### Product Interaction Concerns
+Many skincare products have active ingredients that shouldn't to used at the same time as other active ingredients. With the number of products in a skincare routine increasing, keeping track of which ones interact with each other and managing the times of day they're used can quickly become cumbersome. Without a systematic approach, very quickly a user can end up in a situation where they want to use a skincare product only to realise they've already used another one where there's an interaction that should be avoided. Frustrating! 
+
+### Manual Tracking is Time-Consuming
+Many people rely heavily on simple notes apps for their skincare routine tracking; not only is this an extremely time-consuming process but it also opens the door to human error. Given the nature of manually typing things in, products that are used across multiple days and routines can't easily be duplicated without manually typing or copy / pasting it. Products on certains days can easily be forgotten, and if as a user you want to add some personal notes about the routine then the space and readability quickly goes down hill. Adding to that, as new products are tried or changed in routines, users have to remember to go in and manually update every day / routine where that change occurs; another admin task that's easily forgotten or avoided because of it's painful nature.
+
+### Lack of Specialised Solutions
+Whilst there are a number of existing applications that offer skincare tracking as a feature, they also offer a number of unnecessary extra's such as diary entries, mood tracking, food tracking, progress image updates etc. For someone looking for a **straight forward** skincare routine tracking solution, these extra features add a lot of complexity and make the application unintuitive and less user-friendly. Not to mention the additional costs associated for the 'all in one package'. There's seemingly a gap in the market for people like me that are looking for a no-frills simple skincare routine tracking app.
+
+This is where Skin Stack comes in - a simple way to systematically track and maintain your skincare routines without the manual effort. Nothing you don't need, just simple, to-the-point skincare tracking.
 
 ## 3. Chosen database system (and it's drawbacks) 🚦 <div id="3"/>
 
-PostgreSQL was chosen as it is a powerful relational database management system. For my project this is an important factor given the many-to-many relationship between Routines and Products (described in the ERD above). Additionally PostgreSQL offered more scalability and extensibility than other options (such as MySQL), as well as having robust data integrity functionality, making future project enhancements and expansions possible with ease.
+PostgreSQL was chosen as it is a powerful relational database management system. For my project this is an important factor given the many-to-many relationship between Routines and Products (described in the ERD below). Additionally PostgreSQL offered more scalability and extensibility than other options (such as MySQL), as well as having robust data integrity functionality, making future project enhancements and expansions possible with ease.
 
-However it's worth noting that these advantages do come with the trade off of performance. PostgreSQL being so highly exstensible comes at a cost, and as such it's not as lightweight as some of it's competitors. Taking thsi into consideration, having concurrency handled extremely well and certainty about the integrity of my data was worth the trade off.
+It's worth noting that these advantages do come with the trade off of performance. PostgreSQL being so highly exstensible comes at a cost, and as such it's not as lightweight as some of it's competitors. Taking this into consideration, having concurrency handled extremely well and certainty about the integrity of my data was worth the trade off.
 
 ## 4. Key functionalities & benefits of an ORM 💡 <div id="4"/>
+
+Object-Relational Mapping (or ORM) is extremely useful in helping engineers interact with relational databases, specifically when using an OOP (Object Oriented Programming) approach. 
+
+One of the key functionalities of an ORM is that it is able to directly map objects to tables in a relational database, with objects linking to rows in a table and the attributes of the object mapping to the columns in the table. This is really helpful as it means engineers can navigate their objects in their own language rather than relying on SQL queries in order to work with the objects. 
+
+Another key functionality of an ORM is the management of database schema information. ORM's provide tools to create the database structure and handle the breadth of all CRUD operations (Create, Read, Update, Delete). This streamlines  the process for engineers when it comes to creating tables, querying the data (Read) and updating or deleting information, as they're able to do it in a familiar object-oriented programming way.
 
 ## 5. API Endpoints ☁️ <div id="5"/>
 
@@ -586,40 +606,125 @@ Example Response:
 
 ![ERD](docs/erd/skin_stack_erd.jpg)
 
-### Key points:
+The above Entity-Relationship Diagram consists of the `User`, `Products`, `Routines` and `RoutineProducts` entities. `RoutineProducts` in particular is a join tables that allows products to be associated with a particular routine. Users can both have multiple products and multiple routines, and there can be multiple products within a routine. 
 
-- A user can have many routines
-- A user can add many products
-- Products can be added and not necessarily be in a routine
-- Routines can technically be empty
-- The workflow: empty routines are created and then products are later added to them
-- Either new or existing products can be added to routines
-  - (Will check if product exists first and if not, create a new one)
-- Routines and products are scoped to a user, so they have full control over everything (Create, update, delete, get). There is no shared database across all users
+Given the problem I'm trying to solve, a key output I wanted was a list of a user routines with the associated products within that routine; so having the `RoutineProducts` join table helped facililtate this core relationship in my database.
+
+Additionally as my goal is to have a simple 'no fluff' routine tracker, I kept the table attributes to the minimmum required to solve the key problem, with the `notes` attribute acting as a 'catch all' in order to handle any additional  information that a user may want to optionally include.
 
 ## 7. Third party services used 🤝 <div id="7"/>
 
 Throughout the course of this project, multiple third party services have been utillised to create this application. Some of the key ones include:
 
 ### SQL Alchemy
+SQL Alchemy serves as the ORM (Object Relational Mapper) in this application. In particular it helps map Python objects to the associated database tables and allows database management through familiar, simple Python code rather than requiring SQL syntax.
 
 ### Marshmallow
+Marshmallow is used in this application for object serialisation and deserialisation. It ultimately helps define (through the schema) how data should look when it's transformed from python objects to JSON representation for the API endpoints.
 
 ### Bcrypt
+Bcrypt is a popular, efficient authentication means. In this particular application, Bcrypt is used when a user registers; it will hash their password securely before storing it in the database. When a user later logs in to the application, it is then also used to verify the password that been entered against the stored hashed password.
 
 ### JWT Manager
+JWT Manager is used in order to implement JSON Web Tokens in the application. JWT Manager is able to create, encode and decode JWT's, making it easy to manage user sessions and authenticate and / or authorise API requests.
 
 ## 8. Project models (in terms of the relationships they have with each other) 🧱 <div id="8"/>
 
 ### User model
+The `User` model is used to represent a user in this application and has the following key relationships:
+- A one-to-many relationship with products, i.e. users can have multiple products
+- A one-to-many relationship with routines, i.e. users can have multiple routines
+
+To facilitate these relationships there is a foreign key associated with `user_id` in both the product and routine models, and so in the user model we have the other end of those relationships represented through the use of `db.relationship` and `back_populates='user`.
+
+```python
+class User(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String, nullable=False, unique=True)
+    is_admin = db.Column(db.Boolean, default=False)
+    password = db.Column(db.String, nullable=False)
+
+    products = db.relationship('Product', back_populates='user', cascade='all, delete-orphan')
+    routines = db.relationship('Routine', back_populates='user', cascade='all, delete-orphan')
+```
 
 ### Product model
+The `Product` model is used to represent skincare products in this application and has the following key relationships:
+- A foreign key to `user_id` to associate the user with the product
+- A one-to-many relationship with RoutineProduct, i.e. a product can be in multiple RoutineProduct instances
+
+As we can imagine in the real world a user is able to have as many different skincare products as they'd like, and some of those may or may not be in routines, some may be in multiple routines (both AM & PM for example) and if someone removes a product from their routine, they might not necessarily throw it away (the product still exists outside of the routine). 
+
+Through the implementation of a separate join table for RoutineProducts and a one-to-many relationship to it from products any of the aformentioned scenario's can be elegantly handled without impacting the product table directly, but rather through altering the RoutineProduct instances as required.
+
+```python
+class Product(db.Model):
+    __tablename__ = 'products'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    brand = db.Column(db.String(150), nullable=False)
+    notes = db.Column(db.Text())
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User', back_populates='products')
+    
+    routines = db.relationship('RoutineProduct', back_populates='product')
+```
 
 ### Routine model
 
+The `Routine` model is used to represent a users skincare routines and has the following key relationships:
+- A foreign key to `user_id` to associate the user with the product
+- A one-to-many relationship with RoutineProduct, i.e. a product can be in multiple RoutineProduct instances
+
+Both of these relationships function in a similar way to the previously discussed product table, as a user is able to have multiple routines (just as they are products). Routines are able to be deleted by the user, and so the `cascade='all, delete-orphan` has been implemented on the RoutineProduct relationship. Note that this option is not implemented in the same way on the previously discussed products table. 
+
+When a user deletes a routine, we want to enable the deletion of the RoutineProduct instance, removing all relationships, but NOT deleting the product instance. the addition of the cascade option along with the implementation of RoutineProduct join table works to elegantly handle this use-case.
+
+```python
+class Routine(db.Model):
+    __tablename__ = 'routines'
+
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.Date(), default=datetime.now().strftime('%Y-%m-%d'))
+    day_of_week = db.Column(db.String(20), nullable=False)
+    time_of_day = db.Column(db.String(10))
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User', back_populates='routines')
+
+    routine_products = db.relationship('RoutineProduct', back_populates='routine', cascade='all, delete-orphan')
+```
+
 ### RoutineProduct model
 
+The `RoutineProduct` model is a join table that represents the relationship between products and routines. It has the following key relationships:
+- A many-to-many relationship with products, i.e. multiple products can be associated with multiple RoutineProduct instances
+- A many-to-many relationship with routines, i.e. multiple routines can be associated with multiple RoutineProduct instances
+
+Both of these are represented through foreign keys to both the product and routine tables. Routines are able to exist without products, and in fact the user flow includes first the creation of an empty routine then followed by adding products into that created routine. To enable this flow in the database, the product_id field is set to `nullable=True` so that a RoutineProduct instance can exist with only a routine_id and no product_id if required.
+
+```python
+class RoutineProduct(db.Model):
+    __tablename__ = 'routine_products'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=True)
+    product = db.relationship('Product', back_populates='routines')
+
+    routine_id = db.Column(db.Integer, db.ForeignKey('routines.id'), nullable=False)
+    routine = db.relationship('Routine', back_populates='routine_products')
+```
+
 ## 9. Database relations implemented in this app 👫 <div id="9"/>
+
+
 
 ## 10. Task allocation & tracking (development plan) 💻 <div id="10"/>
 
