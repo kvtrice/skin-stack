@@ -761,7 +761,15 @@ The `RoutineProduct` join table helps make it easy to manage routines with no pr
 
 [Link to Linear Board](https://linear.app/kats-workspace/join/88596d7e69b639b4a651783417b35e23?s=4)
 
-Tasks were tracked using Linear.
+For this project I used the project management tool Linear to allocate and track my tasks. From the outset I began with a planning phase and outlined all the tasks that I needed to complete. At first I completed this at a high-level and then went in and added more detailed sub-tasks to each as needed.
+
+I utilised a simple swimlane model, of Backlog, To Do, In Progress and Done. Tasks that were less fleshed out and with less detail remained in backlog until I was more sure of their implementation. Tasks with more detail, that I had more clarity on were in the 'To do' column. As I began work on them they moved through to 'In Progress' and then 'Done' once complete.
+
+I used T-Shirt sizing to try and estimate the amount of effort involved for each task, as well as adding a priority to try and manage the order of operations. Tasks marked as urgent were typically 'must do' items that blocked progress to other tasks (for example: package installs and imports, flask configuration). I prioritsed those urgent tasks first before moving onto the next priority level. I found that some tasks were worked on simultaneously, such as once I began coding realising that some changes had to be made to my initial ERD, and so both the model and the README had to be updated accordingly.
+
+At the beginning of each day I would take stock of where I was at based on my Linear board, in order to plan my approach for that days work. If needed I would flesh out more detail / break things down into subtasks for upcoming tickets to ensure I didn't get stuck and could maintain a flow of work. Over the course of the project I also continued to commit work consistently to my github repo, and I ensured meaningful commit messages along the way.
+
+Screenshots of my project tracking can be seen below 👇
 
 ### Linear Board
 
