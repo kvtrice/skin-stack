@@ -9,7 +9,7 @@ class RoutineProduct(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=True)
     product = db.relationship('Product', back_populates='routines')
 
-    routine_id = db.Column(db.Integer, db.ForeignKey('routines.id'), nullable=False)
+    routine_id = db.Column(db.Integer, db.ForeignKey('routines.id', ondelete='CASCADE'), nullable=False)
     routine = db.relationship('Routine', back_populates='routine_products')
 
 

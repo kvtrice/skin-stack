@@ -1,5 +1,6 @@
 from flask import Blueprint, request, abort
 from setup import db
+from models.routineproduct import RoutineProduct
 from models.product import Product, ProductSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from auth import admin_required, authorize
@@ -120,6 +121,14 @@ def delete_product(id):
     if product:
         # User can only delete a product that they created (unless they're an Admin)
         authorize(product.user_id)
+
+        # Check if the product is in an existing routine
+        stmt2 = db.select(RoutineProduct).where(RoutineProduct.product_id == id)
+        routines_with_product = db.session.scalar(stmt2)
+
+        if routines_with_product:
+             return {'Error': 'This product is currently in a routine! Please use the "delete product from routine" endpoint or delete the routine/(s) first and then try deleting the product again.'} 
+
         db.session.delete(product)
         db.session.commit()
         return {'Message': 'Product has been successfully deleted'}, 200
