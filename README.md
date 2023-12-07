@@ -724,7 +724,38 @@ class RoutineProduct(db.Model):
 
 ## 9. Database relations implemented in this app 👫 <div id="9"/>
 
+There are a total of four database tables in Skin Stack, each with interlinking relations to enable app functionality in the most efficient way possible.
 
+The `User` table is where information about the user is stored and it consists of common user information such as:
+- User ID field
+- First name
+- Last name
+- Email
+- Password
+- Is Admin field
+
+The `User` table is then linked to the `Products` table through a foreign key relationship. The `Products` table is where information about skincare products is stored, such as:
+- Product ID field
+- Product name
+- Product brand
+- Notes
+  - This field is a great 'catch all' text field (with no character limit) that users can make the most of if they have any additional information they want to optionally include. This prevents the need from implementing lots of additional optional attributes that may not be necessary for all / most users.
+- User ID field (FK)
+  - This relationship allows identification of which product was created by / belongs to which user
+
+Similarly, the `User` table is also linked to the `Routines` table through a foreign key relationship. The `Routines` table is where information about the users skincare routines is stored, such as:
+- Routine ID field
+- The day of the week
+- The time of day
+- User ID field
+  - Again, this relationship allows identification of which routine was created by / belongs to which user
+
+And finally there's a `RoutineProduct` table, which is a join table that enables the many-to-many relationship between routines and products (whereby multiple routines and multiple products in those routines can exist). This table has foreign key relationships to both the routine and product table and is utilised when a user creates routines and adds products into them. It stores data such as:
+- ProductRoutine ID field
+- Product ID (FK)
+- Routine ID (FK)
+
+The `RoutineProduct` join table helps make it easy to manage routines with no products associated, the deletion of routines (but not product instances) and the displaying of which products are associated with which routines; making it a core database relation in this particular project.
 
 ## 10. Task allocation & tracking (development plan) 💻 <div id="10"/>
 
