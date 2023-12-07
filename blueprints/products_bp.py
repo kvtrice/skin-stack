@@ -122,10 +122,12 @@ def delete_product(id):
         # User can only delete a product that they created (unless they're an Admin)
         authorize(product.user_id)
 
-        # Check if the product is in an existing routine
+        # Check if the product is in an existing routine based on the product ID
         stmt2 = db.select(RoutineProduct).where(RoutineProduct.product_id == id)
+        # Return the object
         routines_with_product = db.session.scalar(stmt2)
 
+        # If there IS an associated routine then prevent the action
         if routines_with_product:
              return {'Error': 'This product is currently in a routine! Please use the "delete product from routine" endpoint or delete the routine/(s) first and then try deleting the product again.'} 
 
